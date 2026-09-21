@@ -28,6 +28,9 @@ private:
 
     void fillTheDB();//Наполнение пустой БД начальными данными
 
+    void createDbStructure();//DDL-операции при создании БД
+    void insertBasicData();//DML-операции при создании БД
+
 
 
 };

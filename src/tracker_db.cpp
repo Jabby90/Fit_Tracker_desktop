@@ -3,6 +3,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <vector>
 
 Tracker_DB& Tracker_DB::getInstance()
 {
@@ -39,12 +40,58 @@ Tracker_DB::Tracker_DB(const std::string db_name)
 
 void Tracker_DB::fillTheDB()
 {
-    int rc;
-    const char* sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT);";
+    ///TODO Здесь создать структуру бд и наполнить данными
+
+    //DDl-операции для развёртывания БД
+    createDbStructure();
+
+    //DML-операции для развёртывания БД
+    insertBasicData();
+
+}
+
+void Tracker_DB::createDbStructure()
+{
+    std::vector<std::string*> ddl_arr;
+
+    //здесь - скрипты создания БД
+
+    std::string sql_0 = "CREATE TABLE food (id INTEGER PRIMARY KEY, name TEXT, Kcal real, Proteins real, Fats real, Carbohydrates real);";
+    ddl_arr.push_back(&sql_0);
+
     char* err = nullptr;
+    int rc;
+
+    //перебор всех скриптов создания БД
+    for(auto& element: ddl_arr)
+    {
+        rc = sqlite3_exec(source_db, element->c_str(), nullptr, nullptr, &err);
+        if (rc != SQLITE_OK)
+        {
+            std::cerr << "Error in creating default tables: " << err << "\n";
+            sqlite3_free(err);
+        }
+    }
+
+}
+
+void Tracker_DB::insertBasicData()
+{
+    const char* sql =
+        "INSERT INTO food (name, Kcal, Proteins, Fats, Carbohydrates) VALUES "
+        "('Vasya', 100, 200, 300.0, 400.5),"
+        "('Vasya', 100, 200, 300.0, 400.5),"
+        "('Petya', 100, 200, 300.0, 500.5)"
+    ";"
+    ;
+
+    char* err = nullptr;
+    int rc;
+
     rc = sqlite3_exec(source_db, sql, nullptr, nullptr, &err);
-    if (rc != SQLITE_OK){
-        std::cerr << "Error creating table: " << err << "\n";
+    if (rc != SQLITE_OK)
+    {
+        std::cerr << "Error in inserting default values: " << err << "\n";
         sqlite3_free(err);
     }
 }

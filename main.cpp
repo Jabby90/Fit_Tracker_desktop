@@ -32,5 +32,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    return QApplication::exec();
+    QApplication::exec();
+    //
+    sqlite3_free(Tracker_DB::getInstance().getDb());
+
+    return 0;
+    //return QApplication::exec();
 }
