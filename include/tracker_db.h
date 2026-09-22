@@ -31,6 +31,8 @@ private:
     void createDbStructure();//DDL-операции при создании БД
     void insertBasicData();//DML-операции при создании БД
 
+    void select();//тест функции выбора
+
 
 
 };

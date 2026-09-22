@@ -5,6 +5,21 @@
 #include <iostream>
 #include <vector>
 
+static int callback_select(void* data, int argc, char** argv, char** azColName)
+{
+    int i;
+    //fprintf(stderr, "%s: ", (const char*)data);
+
+    for (i = 0; i < argc; i++)
+    {
+        std::cout << azColName[i] << ' ' << argv[i] << std::endl;
+        //printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+
+    //printf("\n");
+    return 0;
+}
+
 Tracker_DB& Tracker_DB::getInstance()
 {
     if(instance == nullptr)
@@ -30,8 +45,6 @@ Tracker_DB::Tracker_DB(const std::string db_name)
 
     if (rc != SQLITE_OK)
     {
-        // Важно: не выбрасывать исключение из конструктора, если есть риск
-        // неопределённого поведения. Но для простоты примера делаем так:
         const char* errMsg = sqlite3_errmsg(source_db);
         sqlite3_close(source_db);
         throw std::runtime_error(std::string("Failed to open DB: ") + errMsg);
@@ -40,14 +53,11 @@ Tracker_DB::Tracker_DB(const std::string db_name)
 
 void Tracker_DB::fillTheDB()
 {
-    ///TODO Здесь создать структуру бд и наполнить данными
-
     //DDl-операции для развёртывания БД
     createDbStructure();
 
     //DML-операции для развёртывания БД
     insertBasicData();
-
 }
 
 void Tracker_DB::createDbStructure()
@@ -132,4 +142,12 @@ void Tracker_DB::insertBasicData()
         std::cerr << "Error in inserting default values: " << err << "\n";
         sqlite3_free(err);
     }
+}
+
+void Tracker_DB::select()
+{
+    std::string sql = "select * from food;";
+
+    int rc;
+    rc = sqlite3_exec(source_db, sql.c_str(), callback_select, nullptr, nullptr);
 }
