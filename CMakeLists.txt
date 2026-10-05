@@ -14,6 +14,10 @@ qt_add_executable(Fit_Tracker_desktop
     mainwindow.ui
     include/constants.h
     include/tracker_db.h src/tracker_db.cpp
+
+
+    res/food_dictionary_icon.qrc
+
 )
 
 target_link_libraries(Fit_Tracker_desktop

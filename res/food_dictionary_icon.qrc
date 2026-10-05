@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>food_dictionary.jpg</file>
+    </qresource>
+</RCC>
