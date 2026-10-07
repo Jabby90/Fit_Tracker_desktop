@@ -1,6 +1,7 @@
 #include "../include/tracker_db.h"
 #include "../include/constants.h"
 
+#include <QCoreApplication>
 #include <filesystem>
 #include <iostream>
 #include <vector>
@@ -49,6 +50,20 @@ Tracker_DB::Tracker_DB(const std::string db_name)
         sqlite3_close(source_db);
         throw std::runtime_error(std::string("Failed to open DB: ") + errMsg);
     }
+
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(ft_constants::DB_NAME);
+    db.open();
+
+
+    setupFoodDicModel();
+}
+
+Tracker_DB::~Tracker_DB()
+{
+    if(source_db) sqlite3_close(source_db);
+
+    delete model_select_food_dic;
 }
 
 void Tracker_DB::fillTheDB()
@@ -150,4 +165,23 @@ void Tracker_DB::select()
 
     int rc;
     rc = sqlite3_exec(source_db, sql.c_str(), callback_select, nullptr, nullptr);
+}
+
+void Tracker_DB::setupFoodDicModel()
+{
+    this->model_select_food_dic = new QSqlQueryModel;
+
+    model_select_food_dic->setQuery
+        (
+            "select "
+            //"*"
+            "   name as \"Продукт\""
+            "   , kcal as \"Ккал\""
+            "   , proteins as \"Белки\""
+            "   , fats as \"Жиры\""
+            "   , carbohydrates as \"Углеводы\""
+            "from food order by name"
+        );
+
+
 }

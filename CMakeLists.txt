@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(Fit_Tracker_desktop LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Sql)
 find_package(SQLite3)
 
 qt_standard_project_setup()
@@ -25,6 +25,7 @@ target_link_libraries(Fit_Tracker_desktop
         Qt::Core
         Qt::Widgets
         SQLite3::SQLite3
+        Qt6::Sql
 )
 
 install(TARGETS Fit_Tracker_desktop

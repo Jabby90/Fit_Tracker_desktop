@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+//#include <QCoreApplication>
 #include <iostream>
 
 
@@ -8,36 +9,38 @@
 
 Tracker_DB* Tracker_DB::instance = nullptr;
 
-class MySignal : public QObject
-{
-    Q_OBJECT
-public:
-    void sendSignal()
-    {
-        std::cout << "Do it!" << std::endl;
-        emit doIt();
-    }
+// class MySignal : public QObject
+// {
+//     Q_OBJECT
+// public:
+//     void sendSignal()
+//     {
+//         std::cout << "Do it!" << std::endl;
+//         emit doIt();
+//     }
 
-signals:
-    void doIt();
-};
+// signals:
+//     void doIt();
+// };
 
 
-class MySlot : public QObject
-{
-    Q_OBJECT
+// class MySlot : public QObject
+// {
+//     Q_OBJECT
 
-public slots:
-    void justDoIt()
-    {
-        std::cout << "Just do it!" << std::endl;
-    }
+// public slots:
+//     void justDoIt()
+//     {
+//         std::cout << "Just do it!" << std::endl;
+//     }
 
-};
+// };
 
 
 int main(int argc, char *argv[])
 {
+    QApplication a(argc, argv);
+
     try
     {
         // Получаем инстанс (БД откроется при первом вызове)
@@ -55,15 +58,14 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    MySignal signal1;
-    MySlot slot1;
+    // MySignal signal1;
+    // MySlot slot1;
 
-    QObject::connect(&signal1, SIGNAL(doIt()), &slot1, SLOT(justDoIt()));
+    // QObject::connect(&signal1, SIGNAL(doIt()), &slot1, SLOT(justDoIt()));
 
-    signal1.sendSignal();
+    // signal1.sendSignal();
 
 
-    QApplication a(argc, argv);
     MainWindow w;
     w.show();
     QApplication::exec();
@@ -71,10 +73,8 @@ int main(int argc, char *argv[])
 
 
     sqlite3_free(Tracker_DB::getInstance().getDb());
-
     return 0;
-    //return QApplication::exec();
 }
 
 
-#include "main.moc"
+//#include "main.moc"
