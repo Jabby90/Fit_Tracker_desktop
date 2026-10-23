@@ -159,14 +159,6 @@ void Tracker_DB::insertBasicData()
     }
 }
 
-void Tracker_DB::select()
-{
-    std::string sql = "select * from food;";
-
-    int rc;
-    rc = sqlite3_exec(source_db, sql.c_str(), callback_select, nullptr, nullptr);
-}
-
 void Tracker_DB::setupFoodDicModel()
 {
     this->model_select_food_dic = new QSqlQueryModel;
@@ -183,5 +175,24 @@ void Tracker_DB::setupFoodDicModel()
             "from food order by name"
         );
 
+
+}
+
+void Tracker_DB::runSql(const std::string& data_in)
+{
+    //std::cout << data_in << std::endl;
+
+    int rc;
+    char* err = nullptr;
+
+    rc = sqlite3_exec(source_db, data_in.c_str(), nullptr, nullptr, &err);
+    if (rc != SQLITE_OK)
+    {
+        std::cerr << "Error in inserting default values: " << err << "\n";
+        sqlite3_free(err);
+    }
+    //std::string table;
+
+    //const char* sql = "INSERT into ";
 
 }

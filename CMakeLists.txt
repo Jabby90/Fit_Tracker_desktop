@@ -18,6 +18,11 @@ qt_add_executable(Fit_Tracker_desktop
 
     res/food_dictionary_icon.qrc
 
+    include/InsertNewFoodDialog.h
+    src/InsertNewFoodDialog.cpp
+
+
+
 )
 
 target_link_libraries(Fit_Tracker_desktop

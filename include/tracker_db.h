@@ -11,8 +11,6 @@
 
 class Tracker_DB : public QObject
 {
-    //Q_OBJECT
-
 public:
     static Tracker_DB& getInstance();
 
@@ -25,6 +23,9 @@ public:
     Tracker_DB& operator=(const Tracker_DB&) = delete;
 
     QSqlQueryModel* model_select_food_dic{nullptr};
+    void runSql(const std::string& data);
+
+    void setupFoodDicModel();//инициализация модели для справочника продуктов
 
 private:
     Tracker_DB(const std::string db_name);
@@ -40,9 +41,8 @@ private:
     void createDbStructure();//DDL-операции при создании БД
     void insertBasicData();//DML-операции при создании БД
 
-    void select();//тест функции выбора
+    // void select();//тест функции выбора
 
-    void setupFoodDicModel();//инициализация модели для справочника продуктов
 
 };
 

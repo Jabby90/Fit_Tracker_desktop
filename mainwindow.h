@@ -21,5 +21,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+public slots:
+    void insertNewFood();
 };
 #endif // MAINWINDOW_H
