@@ -1,9 +1,25 @@
 #include "../include/tracker_db.h"
 #include "../include/constants.h"
 
+#include <QCoreApplication>
 #include <filesystem>
 #include <iostream>
 #include <vector>
+
+static int callback_select(void* data, int argc, char** argv, char** azColName)
+{
+    int i;
+    //fprintf(stderr, "%s: ", (const char*)data);
+
+    for (i = 0; i < argc; i++)
+    {
+        std::cout << azColName[i] << ' ' << argv[i] << std::endl;
+        //printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+
+    //printf("\n");
+    return 0;
+}
 
 Tracker_DB& Tracker_DB::getInstance()
 {
@@ -30,24 +46,33 @@ Tracker_DB::Tracker_DB(const std::string db_name)
 
     if (rc != SQLITE_OK)
     {
-        // Важно: не выбрасывать исключение из конструктора, если есть риск
-        // неопределённого поведения. Но для простоты примера делаем так:
         const char* errMsg = sqlite3_errmsg(source_db);
         sqlite3_close(source_db);
         throw std::runtime_error(std::string("Failed to open DB: ") + errMsg);
     }
+
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(ft_constants::DB_NAME);
+    db.open();
+
+
+    setupFoodDicModel();
+}
+
+Tracker_DB::~Tracker_DB()
+{
+    if(source_db) sqlite3_close(source_db);
+
+    delete model_select_food_dic;
 }
 
 void Tracker_DB::fillTheDB()
 {
-    ///TODO Здесь создать структуру бд и наполнить данными
-
     //DDl-операции для развёртывания БД
     createDbStructure();
 
     //DML-операции для развёртывания БД
     insertBasicData();
-
 }
 
 void Tracker_DB::createDbStructure()
@@ -127,6 +152,42 @@ void Tracker_DB::insertBasicData()
     int rc;
 
     rc = sqlite3_exec(source_db, sql, nullptr, nullptr, &err);
+    if (rc != SQLITE_OK)
+    {
+        std::cerr << "Error in inserting default values: " << err << "\n";
+        sqlite3_free(err);
+    }
+}
+
+void Tracker_DB::setupFoodDicModel()
+{
+    this->model_select_food_dic = new QSqlQueryModel;
+
+    model_select_food_dic->setQuery
+        (
+            "select "
+            //"*"
+            "   id as \"id\""
+            "   , name as \"Продукт\""
+            "   , kcal as \"Ккал\""
+            "   , proteins as \"Белки\""
+            "   , fats as \"Жиры\""
+            "   , carbohydrates as \"Углеводы\""
+            "from food "
+            "order by name"
+        );
+
+
+}
+
+void Tracker_DB::runSql(const std::string& data_in)
+{
+    //std::cout << data_in << std::endl;
+
+    int rc;
+    char* err = nullptr;
+
+    rc = sqlite3_exec(source_db, data_in.c_str(), nullptr, nullptr, &err);
     if (rc != SQLITE_OK)
     {
         std::cerr << "Error in inserting default values: " << err << "\n";
