@@ -24,5 +24,6 @@ private:
 
 public slots:
     void insertNewFood();
+    void deleteFood();
 };
 #endif // MAINWINDOW_H

@@ -4,6 +4,7 @@
 #include "include/InsertNewFoodDialog.h"
 #include <QInputDialog>
 #include <QMessageBox>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,8 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tab_food_dic->setLayout(ui->tab_dic_layout);
 
     ui->food_dic_view->setModel(Tracker_DB::getInstance().model_select_food_dic);
+    ui->food_dic_view->hideColumn(0); //сокрытие колонки с идентификатором
+    //ui->food_dic_view->selectionModel()->currentIndex()
 
     connect(ui->food_dic_add_button, SIGNAL(clicked()), SLOT(insertNewFood()));
+    connect(ui->food_dic_del_button, SIGNAL(clicked()), SLOT(deleteFood()));
 }
 
 MainWindow::~MainWindow()
@@ -58,6 +62,7 @@ void MainWindow::insertNewFood()
         //QModelIndex bottomRight = model->index(model->rowCount() - 1, model->columnCount() - 1);
         //emit model->dataChanged(topLeft, bottomRight, {Qt::DisplayRole});
 
+        //Обновление табличного представления
         Tracker_DB::getInstance().model_select_food_dic->clear();
         Tracker_DB::getInstance().setupFoodDicModel();
         ui->food_dic_view->setModel(Tracker_DB::getInstance().model_select_food_dic);
@@ -68,4 +73,34 @@ void MainWindow::insertNewFood()
     }
 
     delete input_dialog;
+}
+
+void MainWindow::deleteFood()
+{
+    //Проверяем, выделено ли что-то, если нет - предупреждение
+    if (ui->food_dic_view->selectionModel()->selectedRows().empty()
+        || ui->food_dic_view->selectionModel()->selectedRows().size() > 1)
+    {
+        QMessageBox *msgBox = new QMessageBox(this);
+        msgBox->setIcon(QMessageBox::Critical); // Устанавливаем иконку предупреждения
+        msgBox->setText("Выделите целиком строку, которую хотите удалить");
+        msgBox->setWindowTitle("Не выделена строка");
+        msgBox->exec();
+        delete msgBox;
+    }
+    else
+    {
+        //получаем id элемента по номеру строки
+        auto selected_index = ui->food_dic_view->selectionModel()->selectedRows();
+        auto item = selected_index[0].siblingAtColumn(0).data().toString();
+
+        //формируем запрос на удаление
+        std::string sql_statement = "delete from food where id = " + item.toStdString() + ";";
+        Tracker_DB::getInstance().runSql(sql_statement);
+
+        //Обновление табличного представления
+        Tracker_DB::getInstance().model_select_food_dic->clear();
+        Tracker_DB::getInstance().setupFoodDicModel();
+        ui->food_dic_view->setModel(Tracker_DB::getInstance().model_select_food_dic);
+    }
 }

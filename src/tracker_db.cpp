@@ -167,12 +167,14 @@ void Tracker_DB::setupFoodDicModel()
         (
             "select "
             //"*"
-            "   name as \"Продукт\""
+            "   id as \"id\""
+            "   , name as \"Продукт\""
             "   , kcal as \"Ккал\""
             "   , proteins as \"Белки\""
             "   , fats as \"Жиры\""
             "   , carbohydrates as \"Углеводы\""
-            "from food order by name"
+            "from food "
+            "order by name"
         );
 
 
@@ -191,8 +193,4 @@ void Tracker_DB::runSql(const std::string& data_in)
         std::cerr << "Error in inserting default values: " << err << "\n";
         sqlite3_free(err);
     }
-    //std::string table;
-
-    //const char* sql = "INSERT into ";
-
 }
