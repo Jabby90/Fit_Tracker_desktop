@@ -32,6 +32,9 @@
        <property name="tabPosition">
         <enum>QTabWidget::TabPosition::South</enum>
        </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
        <widget class="QWidget" name="tab_food_dic">
         <attribute name="title">
          <string>Список продуктов</string>
@@ -97,6 +100,87 @@
             </item>
             <item>
              <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_food_diary">
+        <attribute name="title">
+         <string>Дневник питания</string>
+        </attribute>
+        <widget class="QWidget" name="verticalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>791</width>
+           <height>531</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="food_diary_layout">
+          <item>
+           <widget class="QTableView" name="food_diary_view">
+            <property name="layoutDirection">
+             <enum>Qt::LayoutDirection::LeftToRight</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="food_diary_del_button">
+              <property name="text">
+               <string>Удалить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="food_diary_add_button">
+              <property name="text">
+               <string>Добавить</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
               <property name="orientation">
                <enum>Qt::Orientation::Horizontal</enum>
               </property>

@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->centralwidget->setLayout(ui->main_app_layout);
     ui->tab_food_dic->setLayout(ui->tab_dic_layout);
+    ui->tab_food_diary->setLayout(ui->food_diary_layout);
 
     ui->food_dic_view->setModel(Tracker_DB::getInstance().model_select_food_dic);
     ui->food_dic_view->hideColumn(0); //сокрытие колонки с идентификатором
