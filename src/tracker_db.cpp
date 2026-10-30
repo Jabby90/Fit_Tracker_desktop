@@ -57,6 +57,7 @@ Tracker_DB::Tracker_DB(const std::string db_name)
 
 
     setupFoodDicModel();
+    setupFoodDiaryModel();
 }
 
 Tracker_DB::~Tracker_DB()
@@ -81,8 +82,14 @@ void Tracker_DB::createDbStructure()
 
     //здесь - скрипты создания БД
 
-    std::string sql_0 = "CREATE TABLE food (id INTEGER PRIMARY KEY, name TEXT, Kcal real, Proteins real, Fats real, Carbohydrates real);";
+    std::string sql_0 = "create table food (id integer primary key, name text, kcal real, proteins real, fats real, carbohydrates real);";
     ddl_arr.push_back(&sql_0);
+
+    std::string sql_1 = "create table eatings (id integer primary key, eating_time datetime , remark text);";
+    ddl_arr.push_back(&sql_1);
+
+    std::string sql_2 = "create table eatings_menu(id integer primary key, eatings_id integer, food_id integer, mass real, foreign key (eatings_id) references eatings (id), foreign key (food_id) references food (id));";
+    ddl_arr.push_back(&sql_2);
 
     char* err = nullptr;
     int rc;
@@ -103,7 +110,7 @@ void Tracker_DB::createDbStructure()
 void Tracker_DB::insertBasicData()
 {
     const char* sql =
-        "INSERT INTO food (name, Kcal, Proteins, Fats, Carbohydrates) VALUES "
+        "insert into food (name, kcal, proteins, fats, carbohydrates) values "
         "('Авокадо', 160.00, 2.00, 14.66, 8.53),"
         "('Апельсины', 47.00, 0.94, 0.12, 11.75),"
         "('Апельсины красные', 36.00, 0.90, 0.20, 8.10),"
@@ -164,20 +171,31 @@ void Tracker_DB::setupFoodDicModel()
     this->model_select_food_dic = new QSqlQueryModel;
 
     model_select_food_dic->setQuery
-        (
-            "select "
-            //"*"
-            "   id as \"id\""
-            "   , name as \"Продукт\""
-            "   , kcal as \"Ккал\""
-            "   , proteins as \"Белки\""
-            "   , fats as \"Жиры\""
-            "   , carbohydrates as \"Углеводы\""
-            "from food "
-            "order by name"
+    (
+        "select "
+        //"*"
+        "   id as \"id\""
+        "   , name as \"Продукт\""
+        "   , kcal as \"Ккал\""
+        "   , proteins as \"Белки\""
+        "   , fats as \"Жиры\""
+        "   , carbohydrates as \"Углеводы\""
+        "from food "
+        "order by name"
+    );
+
+
+}
+
+void Tracker_DB::setupFoodDiaryModel()
+{
+    this->model_select_food_diary = new QSqlQueryModel;
+    model_select_food_diary->setQuery
+    (
+        "select "
+        "*"
+        "from eatings;"
         );
-
-
 }
 
 void Tracker_DB::runSql(const std::string& data_in)

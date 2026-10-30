@@ -19,7 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->food_dic_view->setModel(Tracker_DB::getInstance().model_select_food_dic);
     ui->food_dic_view->hideColumn(0); //сокрытие колонки с идентификатором
-    //ui->food_dic_view->selectionModel()->currentIndex()
+
+    ui->food_diary_view->setModel(Tracker_DB::getInstance().model_select_food_diary);
+    ui->food_diary_view->hideColumn(0);
+
 
     connect(ui->food_dic_add_button, SIGNAL(clicked()), SLOT(insertNewFood()));
     connect(ui->food_dic_del_button, SIGNAL(clicked()), SLOT(deleteFood()));

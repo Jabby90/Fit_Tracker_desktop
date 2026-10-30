@@ -22,10 +22,15 @@ public:
     Tracker_DB(const Tracker_DB&) = delete;
     Tracker_DB& operator=(const Tracker_DB&) = delete;
 
-    QSqlQueryModel* model_select_food_dic{nullptr};
     void runSql(const std::string& data);
 
-    void setupFoodDicModel();//инициализация модели для справочника продуктов
+    QSqlQueryModel* model_select_food_dic{nullptr};
+    QSqlQueryModel* model_select_food_diary{nullptr};
+
+    //инициализаця моделей справочников
+
+    void setupFoodDicModel();
+    void setupFoodDiaryModel();
 
 private:
     Tracker_DB(const std::string db_name);
@@ -42,7 +47,6 @@ private:
     void insertBasicData();//DML-операции при создании БД
 
     // void select();//тест функции выбора
-
 
 };
 
