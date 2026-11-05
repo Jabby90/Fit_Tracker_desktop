@@ -7,7 +7,7 @@
 #include <qmessagebox.h>
 #include <qvalidator.h>
 
-#include <iostream>
+//#include <iostream>
 
 InsertNewFoodDialog::InsertNewFoodDialog(QWidget* parent) : QDialog(parent)
 {
@@ -86,8 +86,6 @@ bool InsertNewFoodDialog::verifyData()
         && verifyProteins()
         && verifyFats()
         && verifyCarbohydrates();
-
-
 }
 
 bool InsertNewFoodDialog::verifyName()

@@ -20,6 +20,8 @@ qt_add_executable(Fit_Tracker_desktop
 
     include/InsertNewFoodDialog.h
     src/InsertNewFoodDialog.cpp
+    include/InsertNewEatingDialog.h
+    src/InsertNewEatingDialog.cpp
 
 
 

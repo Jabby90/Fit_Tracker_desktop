@@ -2,9 +2,10 @@
 #include "ui_mainwindow.h"
 #include "include/tracker_db.h"
 #include "include/InsertNewFoodDialog.h"
+#include "include/InsertNewEatingDialog.h"
 #include <QInputDialog>
 #include <QMessageBox>
-#include <iostream>
+//#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->food_dic_add_button, SIGNAL(clicked()), SLOT(insertNewFood()));
     connect(ui->food_dic_del_button, SIGNAL(clicked()), SLOT(deleteFood()));
+    connect(ui->food_diary_add_button, SIGNAL(clicked()), SLOT(insertNewEating()));
 }
 
 MainWindow::~MainWindow()
@@ -107,4 +109,16 @@ void MainWindow::deleteFood()
         Tracker_DB::getInstance().setupFoodDicModel();
         ui->food_dic_view->setModel(Tracker_DB::getInstance().model_select_food_dic);
     }
+}
+
+void MainWindow::insertNewEating()
+{
+    InsertNewEatingDialog* input_dialog = new InsertNewEatingDialog(this);
+
+    if(input_dialog->exec() == QDialog::Accepted)
+    {
+
+    }
+
+    delete input_dialog;
 }
