@@ -53,6 +53,7 @@ void InsertNewEatingDialog::checkTheCells(int changed_row, int changed_column)
     int total_rows{food_table->rowCount()};
     QTableWidgetItem* item;
 
+    //TODO Здесь лезе ошибка при удалении строки. Разобраться, как её убрать. Логика, на первый взгляд, работает
     if(rowIsEmpty(changed_row) && total_rows > 1) food_table->removeRow(changed_row);
     //if(rowIsEmpty(changed_row) && total_rows > 1)
     //{
